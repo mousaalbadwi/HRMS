@@ -1,4 +1,5 @@
-﻿using HRMS.DTOs;
+﻿using HRMS.DbContext;
+using HRMS.DTOs;
 using HRMS.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,10 +23,19 @@ namespace HRMS.Controllers
 
         };
 
+        //Dependency Injection
+       private readonly HrmsContext _context;
+        public EmployeesController(HrmsContext context)
+        {
+            _context = context;
+        }
+
+
         [HttpGet("GetByCraterya")]
         public IActionResult GetByCraterya([FromQuery]SearchEmployeeDTO searchEmpDto)
         {
-            var result = from Employees in employees
+            var result = from Employees in _context.Employees
+                      from Departments in _context.Departments.Where(x => x.Id==Employees.DepartmentId).DefaultIfEmpty() // Left Join
                          where (searchEmpDto == null || Employees.Position.ToUpper().Contains(searchEmpDto.Position.ToUpper()))&&
                          (searchEmpDto==null ||Employees.FName.ToUpper().Contains(searchEmpDto.Name.ToUpper())) 
                          orderby Employees.Id descending
@@ -34,8 +44,13 @@ namespace HRMS.Controllers
                              Name = Employees.FName + " " + Employees.LName,
                              Email = Employees.Email,
                              BirthDate = Employees.BirthDate,
+                             Position = Employees.Position,
+                             Salary= Employees.Salary,
+                             DepartmentId= Employees.DepartmentId,
+                             DepartmentName=Departments.Name,
 
-                             Position = Employees.Position
+                                ManagerId= Employees.ManagerId,
+
                          };
             return Ok(result);
 

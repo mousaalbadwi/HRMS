@@ -9,10 +9,10 @@ namespace HRMS.Models
         public string? Email { get; set; }
         public DateTime? BirthDate { get; set; } 
         public string? Position { get; set; }
+        public decimal Salary { get; set; }
 
-        internal static IEnumerable<object> Where(Func<object, bool> value)
-        {
-            throw new NotImplementedException();
-        }
+        public long DepartmentId { get; set; }
+        public long ManagerId { get; set; }
+        
     }
 }
