@@ -27,7 +27,8 @@ namespace HRMS.Controllers
             var result = from Employees in _context.Employees
                          from Departments in _context.Departments.Where(x => x.Id == Employees.DepartmentId).DefaultIfEmpty() // Left Join
                          from Managers in _context.Employees.Where(x => x.Id == Employees.ManagerId).DefaultIfEmpty() // Left Join
-                         where (searchEmpDto == null || Employees.Position.ToUpper().Contains(searchEmpDto.Position.ToUpper()))&&
+                         from Positions in _context.Lookup.Where(x => x.Id == Employees.PositionId)
+                         where (searchEmpDto == null || Employees.PositionId==searchEmpDto.PositionId)&&
                          (searchEmpDto==null ||Employees.FName.ToUpper().Contains(searchEmpDto.Name.ToUpper())) 
                          orderby Employees.Id descending
                          select new EmployeeDTO
@@ -35,7 +36,8 @@ namespace HRMS.Controllers
                              Name = Employees.FName + " " + Employees.LName,
                              Email = Employees.Email,
                              BirthDate = Employees.BirthDate,
-                             Position = Employees.Position,
+                             PositionId = Employees.PositionId,
+
                              Salary= Employees.Salary,
                              DepartmentId= Employees.DepartmentId,
                              DepartmentName=Departments.Name,
@@ -48,7 +50,7 @@ namespace HRMS.Controllers
 
         }
 
-        [HttpGet("GetById")]
+        [HttpGet("GetById/{id}")]
         public IActionResult GetById(long id)
         {
             var result = _context.Employees.Select(x => new EmployeeDTO
@@ -57,12 +59,13 @@ namespace HRMS.Controllers
                 Name = x.FName + " " + x.LName,
                 Email = x.Email,
                 BirthDate = x.BirthDate,
-                Position = x.Position,
-                Salary= x.Salary,
+                PositionId = x.PositionId,
+                PositionName=x.Lookup.Name,
+                Salary = x.Salary,
                 DepartmentId= x.DepartmentId,
-               // DepartmentName="", // To be implemented
+                DepartmentName=x.Department.Name,
                 ManagerId = x.ManagerId,
-                //ManagerName = "" // To be implemented
+                ManagerName =x.Manager.FName,
 
             }).FirstOrDefault(e => e.Id == id);
 
@@ -84,7 +87,7 @@ namespace HRMS.Controllers
                 LName = emp.LName,
                 Email = emp.Email,
                 BirthDate = emp.BirthDate,
-                Position = emp.Position,
+                PositionId = emp.PositionId,
                 Salary = emp.Salary,
                 DepartmentId = emp.DepartmentId,
                 ManagerId = emp.ManagerId,
@@ -108,7 +111,7 @@ namespace HRMS.Controllers
             existingEmp.LName = emp.LName;
             existingEmp.Email = emp.Email;
             existingEmp.BirthDate = emp.BirthDate;
-            existingEmp.Position = emp.Position;
+            existingEmp.PositionId = emp.PositionId;
             existingEmp.Salary = emp.Salary;
             existingEmp.DepartmentId = emp.DepartmentId;
             existingEmp.ManagerId = emp.ManagerId;

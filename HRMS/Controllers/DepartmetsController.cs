@@ -1,4 +1,5 @@
-﻿using HRMS.DTOs;
+﻿using HRMS.DbContext;
+using HRMS.DTOs;
 using HRMS.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,19 +10,19 @@ namespace HRMS.Controllers
     [ApiController]
     public class DepartmetsController : ControllerBase
     {
-        public static List<Department> department = new List<Department>
+
+        //Dependency Injection
+        private readonly HrmsContext _context;
+        public DepartmetsController(HrmsContext context)
         {
-           new Department {Id=1, Name = "IT",Description="Information Technology",FloorNumber=5 },
-           new Department {Id=2, Name = "HR",Description="Human Resource",FloorNumber=3 },
-           new Department {Id=3, Name = "Finance",Description="Finance Department",FloorNumber=4 },
-
-        };
-
+            _context = context;
+        }
+        
 
         [HttpGet("GetByCraterya")]
         public IActionResult GetByCraterya([FromQuery] FilterDepartmentsDTO filterDepDto)
         {
-            var result = from Department in department
+            var result = from Department in _context.Departments
                          where (filterDepDto == null || Department.Name.ToUpper().Contains(filterDepDto.Name.ToUpper())) &&
                          (filterDepDto == null || Department.FloorNumber.ToString().Contains(filterDepDto.FloorNumber.ToString()))
                          orderby Department.Id descending
@@ -40,7 +41,7 @@ namespace HRMS.Controllers
         [HttpGet("GetById/{id}")]//api/Departmets/GetById/1
         public IActionResult GetById(long id)
         {
-            var result = department.Where(x => x.Id == id).Select(x => new DepartmentsDOT
+            var result = _context.Departments.Where(x => x.Id == id).Select(x => new DepartmentsDOT
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -60,30 +61,26 @@ namespace HRMS.Controllers
         [HttpPost("AddDepartment")]
         public IActionResult AddDepartment([FromBody] DepartmentsDOT departmentDto)
         {
-            var newDepartment = new Department
-            {
-                Id = departmentDto.Id,
-                Name = departmentDto.Name,
-                Description = departmentDto.Description,
-                FloorNumber = departmentDto.FloorNumber
-            };
-            department.Add(newDepartment);
+            if (departmentDto == null || departmentDto.Name == null)
+    {
+        return BadRequest("Invalid department data.");
+    }
 
-            if (newDepartment == null)
-            {
-                return BadRequest("Invalid department data.");
-            }
-            else
-            {
-                return Ok(new { message = "Department added successfully", newDepartment });
+    var newDepartment = new Department
+    {
+        Id = departmentDto.Id,
+        Name = departmentDto.Name ?? string.Empty,
+        Description = departmentDto.Description,
+        FloorNumber = departmentDto.FloorNumber
+    };
+    _context.Departments.Add(newDepartment);
 
-            }
-
+    return Ok(new { message = "Department added successfully", newDepartment });
         }
         [HttpPut("UpdateDepartment")]
         public IActionResult UpdateDepartment([FromBody] DepartmentsDOT UpdatDepDto)
         {
-            var existingDepartment = department.FirstOrDefault(d => d.Id == UpdatDepDto.Id);
+            var existingDepartment = _context.Departments.FirstOrDefault(d => d.Id == UpdatDepDto.Id);
             if (existingDepartment == null)
             {
                 return NotFound($"Department with Id {UpdatDepDto.Id} not found.");
@@ -106,12 +103,12 @@ namespace HRMS.Controllers
         [HttpDelete("Delete/{id}")]
        public IActionResult Delete(long id)
         {
-            var existingDepartment = department.FirstOrDefault(d => d.Id == id);
+            var existingDepartment = _context.Departments.FirstOrDefault(d => d.Id == id);
             if (existingDepartment == null)
             {
                 return NotFound($"Department with Id {id} not found.");
             }
-            department.Remove(existingDepartment);
+            _context.Departments.Remove(existingDepartment);
             return Ok(new { message = "Department deleted successfully", existingDepartment });
 
         }
