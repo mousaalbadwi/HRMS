@@ -29,5 +29,10 @@ namespace HRMS.Models
         public long PositionId { get; set; }// Lookup Table Foreign Key
 
         public Lookup Lookup { get; set; } // Navigation Property
+
+        public long? UserId { get; set; } 
+        public User? User { get; set; } // Navigation Property
+
+
     }
 }

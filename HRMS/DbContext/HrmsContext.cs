@@ -13,6 +13,7 @@ namespace HRMS.DbContext
         public DbSet<Employees> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Lookup> Lookup { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,6 +49,14 @@ namespace HRMS.DbContext
 
                  );
 
+            modelBuilder.Entity<User>().HasIndex(x=> x.Username).IsUnique();// بهذه الطريقة بحلي الUsername من نوع Uniqe 
+           
+            modelBuilder.Entity<Employees>().HasIndex(x => x.UserId).IsUnique();
+
+            modelBuilder.Entity<User>().HasData (
+                new User { Id = 1, Username = "Admin", IsAdmin = true, HashedPassword = "$2a$11$Mdqh5UJBfCw9HB/2s9BGN.BpV6OIa3sque6o8T9Z5B9vVg2L1Srhi" }
+                
+                );
 
         }
     }

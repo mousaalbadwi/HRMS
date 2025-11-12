@@ -4,6 +4,7 @@ using HRMS.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRMS.Migrations
 {
     [DbContext(typeof(HrmsContext))]
-    partial class HrmsContextModelSnapshot : ModelSnapshot
+    [Migration("20251109081941_AddTable_User")]
+    partial class AddTable_User
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,9 +83,6 @@ namespace HRMS.Migrations
                     b.Property<decimal>("Salary")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<long?>("UserId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
@@ -90,10 +90,6 @@ namespace HRMS.Migrations
                     b.HasIndex("ManagerId");
 
                     b.HasIndex("PositionId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Employees");
                 });
@@ -204,15 +200,6 @@ namespace HRMS.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            HashedPassword = "$2a$11$Mdqh5UJBfCw9HB/2s9BGN.BpV6OIa3sque6o8T9Z5B9vVg2L1Srhi",
-                            IsAdmin = true,
-                            Username = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("HRMS.Models.Employees", b =>
@@ -235,17 +222,11 @@ namespace HRMS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HRMS.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Department");
 
                     b.Navigation("Lookup");
 
                     b.Navigation("Manager");
-
-                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

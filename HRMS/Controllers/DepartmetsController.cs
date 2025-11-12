@@ -72,6 +72,7 @@ namespace HRMS.Controllers
         Name = departmentDto.Name ?? string.Empty,
         Description = departmentDto.Description,
         FloorNumber = departmentDto.FloorNumber
+        
     };
     _context.Departments.Add(newDepartment);
 
