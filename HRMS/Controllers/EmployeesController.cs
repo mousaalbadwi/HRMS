@@ -1,12 +1,14 @@
 ﻿using HRMS.DbContext;
 using HRMS.DTOs;
 using HRMS.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 
 namespace HRMS.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EmployeesController : ControllerBase
@@ -22,7 +24,7 @@ namespace HRMS.Controllers
 
 
         [HttpGet("GetByCraterya")]
-        public IActionResult GetByCraterya([FromQuery]SearchEmployeeDTO searchEmpDto)
+        public IActionResult GetByCraterya([FromQuery ]SearchEmployeeDTO searchEmpDto)
         {
             try
             {

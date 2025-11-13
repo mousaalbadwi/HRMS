@@ -34,8 +34,10 @@ namespace HRMS.Controllers
                 }
 
                 if (!BCrypt.Net.BCrypt.Verify(LoginDto.Password,user.HashedPassword)) //التحقق من كلمة المرور
+                 //هذا يستخدم مكتبة BCrypt للتحقق من كلمة المرور المدخلة مقابل كلمة المرور المخزنة بشكل مشفر في قاعدة البيانات
                 {
-                    return Unauthorized(new { Message = "Invalid username or password." });
+
+                    return Unauthorized(new { Message = "Invalid username or password." });//401 Unauthorized
                 }
 
                 var Token = GeneratJWToken(user);//انشاء التوكن 
@@ -53,7 +55,7 @@ namespace HRMS.Controllers
 
         private string GeneratJWToken(Models.User user)//انشاء التوكن
         {
-            var Claims = new List<Claim>();
+            var Claims = new List<Claim>();//قائمة الادعاءات اللي بدنا نحطها بالتوكن
             Claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));//ادعاء بمعرف المستخدم
             Claims.Add(new Claim(ClaimTypes.Name, user.Username));//ادعاء باسم المستخدم
             if (user.IsAdmin)//اذا كان الادمن
