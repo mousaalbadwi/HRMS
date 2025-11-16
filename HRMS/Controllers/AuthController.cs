@@ -1,6 +1,7 @@
 ﻿using HRMS.DbContext;
 using HRMS.DTOs.Auth;
 using HRMS.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,9 @@ using System.Security.Claims;
 using System.Text;
 
 namespace HRMS.Controllers
+
 {
+   
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase

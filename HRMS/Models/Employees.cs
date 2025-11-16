@@ -18,11 +18,11 @@ namespace HRMS.Models
         public decimal Salary { get; set; }
        
         [ForeignKey("Department")]
-        public long DepartmentId { get; set; }
+        public long? DepartmentId { get; set; }
         public Department Department { get; set; }// Navigation Property
         
         [ForeignKey("Manager")]
-        public long ManagerId { get; set; }
+        public long? ManagerId { get; set; }
         public Employees Manager { get; set; } // Navigation Property
         
         [ForeignKey("Lookup")]
