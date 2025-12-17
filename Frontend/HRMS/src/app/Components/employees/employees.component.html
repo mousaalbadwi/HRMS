@@ -1,0 +1,82 @@
+<div class="container-fluid mt-2">
+<div class="card">
+<div class="card-header">
+<h5><i class="bi bi-funnel"></i> Filter</h5>
+</div>
+  <div class="card-body">
+   <div class="row mb-2">
+     <div class="col-lg-4 col-md-4 col-sm-12">
+      <label for="employeeName" class="form-label">Employee Name</label>
+      <input type="text" class="form-control" id="employeeName" placeholder="Employee Name">
+    </div>
+   <div class="col-lg-4 col-md-4 col-sm-12">
+      <label for="Position" class="form-label">Position</label>
+      <input type="text" class="form-control" id="Position" placeholder="Position">
+    </div>
+   <div class="col-lg-4 col-md-4 col-sm-12">
+      <label for="Status" class="form-label">Status</label>
+      <input type="text" class="form-control" id="Status" placeholder="Status">
+    </div>
+ 
+   </div>
+   <div class="text-end">
+    <button type="button" class="btn btn-outline-secondary">
+      <i class="bi bi-search"></i>
+      Search</button>
+
+   </div>
+  </div>
+</div>
+<div class="card mt-2">
+  <div class="card-header  table-header">
+    <div>
+      <h5>Add Employees</h5>
+    </div>
+    <div>
+      <button type="button" class="btn btn-outline-secondary">
+        <i class="bi bi-person-add"> </i>
+          Add Employee</button>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-2">
+<div class="card-header">
+<h5>Employees</h5>
+</div>
+  <div class="card-body">
+   <table class="table table-striped">
+  <thead>
+    <tr>
+      @for (col of employeesTableColumns; track col) {
+                   <th>{{col}}</th>
+      }
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>&#64;mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>&#64;fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>John</td>
+      <td>Doe</td>
+      <td>&#64;social</td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+</div>
+
+</div>
+
+  
